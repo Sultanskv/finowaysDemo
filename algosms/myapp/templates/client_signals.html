@@ -1,0 +1,79 @@
+{% extends 'client_base.html' %}
+
+{% block main %}
+<style>
+.content {
+  box-shadow: 0 0 20px rgba(245, 222, 74, 0.5); /* Golden shadow effect */
+  padding: 20px; /* Add some padding */
+  background-color: rgb(0, 0, 0); /* Set background color */
+  border-radius: 10px; /* Add border radius for rounded corners */
+}
+</style>
+
+<script>
+  new DataTable('#example', {
+    layout: {
+        topStart: {
+            buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+        }
+    }
+});
+</script>
+ 
+<div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Client Signals</h4>
+          </div>
+          <div class="card-body">
+            {% if error_message %}
+            <div class="alert alert-danger" role="alert">
+              {{ error_message }}
+            </div>
+            {% endif %}
+            <div class="table-responsive table-container">
+              <table class="table tablesorter table-bordered table-hover" id="example">
+                <thead class="text-white" style="background-color: black;">
+                  <tr>
+                    <th>Signal Time</th>
+                    <th>SYMBOL</th>
+                    <th>TYPE</th>
+                    <th>QUANTITY</th>
+                    <th>ENTRY PRICE</th>
+                    <th>EXIT PRICE</th>
+                 
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for signal in s %}
+                  <tr>
+                      <td>{{ signal.created_at|default:"-" }}</td>
+                      <td>{{ signal.SYMBOL|default:"-" }}</td>
+                      <td>{{ signal.TYPE|default:"-" }}</td>
+                      <td>{{ signal.QUANTITY|default:"-" }}</td>
+                      <td>{{ signal.ENTRY_PRICE|default:"-" }}</td>
+                      <td>{{ signal.EXIT_PRICE|default:"-" }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% comment %} <th>ID</th>
+<th>Signal Time</th>
+<th>SYMBOL</th>
+<th>TYPE</th>
+<th>QUANTITY</th>
+<th>ENTRY PRICE</th>
+<th>EXIT PRICE</th> {% endcomment %}

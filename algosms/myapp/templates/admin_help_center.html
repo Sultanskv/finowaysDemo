@@ -1,0 +1,19 @@
+{% extends 'admin_base.html' %}
+
+{% block main %}
+<h2>Admin Help Center</h2>
+<table>
+    <tr>
+        <th>Client Name</th>
+        <th>Message</th>
+        <th>Timestamp</th>
+    </tr>
+    {% for message in messages %}
+    <tr>
+        <td>{{ message.client_name }}</td>
+        <td>{{ message.message }}</td>
+        <td>{{ message.timestamp }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

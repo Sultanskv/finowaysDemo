@@ -1,0 +1,297 @@
+{% extends "client_base.html" %}
+
+{% block main %}
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+  }
+  
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  .switch input {
+    display: none;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  .content {
+    box-shadow: 0 0 20px rgba(245, 222, 74, 0.5); /* Golden shadow effect */
+    padding: 20px; /* Add some padding */
+    background-color: rgb(0, 0, 0); /* Set background color */
+    border-radius: 10px; /* Add border radius for rounded corners */
+}
+
+  button[type="submit"] {
+    background-color: black;      /* Background color */
+    color: gold;                  /* Text color */
+    border: 2px solid gold;       /* Border color */
+    border-radius: 5px;           /* Rounded corners */
+    padding: 10px 20px;           /* Padding */
+    font-size: 16px;              /* Font size */
+    font-weight: bold;            /* Bold text */
+    cursor: pointer;              /* Pointer cursor on hover */
+    transition: all 0.3s ease;    /* Smooth transition for effects */
+    box-shadow: 0 4px 8px rgba(245, 222, 74, 0.5); /* Add shadow */
+}
+
+button[type="submit"]:hover {
+    background-color: gold;       /* Background color on hover */
+    color: black;                 /* Text color on hover */
+    box-shadow: 0 6px 12px rgba(245, 222, 74, 0.7); /* More pronounced shadow */
+    transform: scale(1.05);       /* Slightly enlarge on hover */
+}
+
+button[type="submit"]:focus {
+    outline: none;                /* Remove default outline */
+    box-shadow: 0 0 10px gold;    /* Gold outline on focus */
+}
+
+  /* ==================below============== */
+
+  
+</style>
+
+<div class="content">
+  {% comment %} <div class="row justify-content-center"> <!-- Center the content within the row --> {% endcomment %}
+   
+    {% comment %} <div class="content">
+      <div class="row"> {% endcomment %}
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Welcome To Finoways</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive table-container">
+                <form method="post" >
+                  {% csrf_token %}
+                  <table class="table tablesorter" id="signalsTable">
+                    <thead class="text-white" style="background-color: black;">
+                      <tr>
+                        <th>NO</th>
+                        <th>SYMBOL</th>
+                        <th>QUANTITY</th>
+                        <th>SEGMENT</th>
+                        <th>ORDER TYPE</th>
+                        <th>TRADING</th>
+                       
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Entry 1: COMEX, Limit Order -->
+                      <tr>
+                        <td>1</td>
+                        <td>XAUUSD</td>
+                        {% for s in signals %}
+                          {% if "XAUUSD" == s.SYMBOL%}
+                            <td><input type="text" name="QUANTITY1" value="{{s.QUANTITY}}"></td>
+                        
+                          
+                        <td>COMEX</td>
+                        <td>
+                          <select name="ORDER_TYPE1">
+                            <option value="Limit">Limit Order</option>
+                            <option value="Market">Market Order</option>
+                          </select>
+                        </td>
+                        <td>
+                          <label class="switch"><input type="checkbox" name="TRADING1" {% if s.trade == 'on' %} checked {% endif %}>
+                            <span class="slider round"></span>
+                          </label>
+                        </td>
+                        {% endif %}  
+                      {% endfor %}
+                      </tr>
+                      <!-- Entry 2: COMEX, Market Order -->
+                      <tr>
+                        <td>2</td>
+                        <td>USOIL</td>
+                        {% for s in signals %}
+                          {% if "USOIL" == s.SYMBOL%}
+                            <td><input type="text" name="QUANTITY2" value="{{s.QUANTITY}}"></td>
+                          
+                         
+                        <td>COMEX</td>
+                        <td>
+                          <select name="ORDER_TYPE2">
+                            <option value="Limit">Limit Order</option>
+                            <option value="Market" selected>Market Order</option>
+                          </select>
+                        </td>
+                        <td>
+                          <label class="switch"><input type="checkbox" name="TRADING2" {% if s.trade == 'on' %} checked {% endif %}>
+                            <span class="slider round"></span>
+                          </label>
+                        </td>
+                        {% endif %}  
+                      {% endfor %}
+                      </tr>
+                      <!-- Entry 3-5: FOREX, Limit Order -->
+                      <tr>
+                        <td>3</td>
+                        
+                        <td>EURUSD</td>
+                        {% for s in signals %}
+                          {% if "EURUSD" == s.SYMBOL%}
+                            <td><input type="text" name="QUANTITY3" value="{{s.QUANTITY}}"></td>
+                         
+                        <td>FOREX</td>
+                        <td>
+                          <select name="ORDER_TYPE3">
+                            <option value="Limit">Limit Order</option>
+                            <option value="Market">Market Order</option>
+                          </select>
+                        </td>
+                        <td>
+                          <label class="switch"><input type="checkbox" name="TRADING3" {% if s.trade == 'on' %} checked {% endif %}>
+                            <span class="slider round"></span>
+                          </label>
+                        </td>
+                        {% endif %}  
+                      {% endfor %}
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>USDJPY</td>
+                        {% for s in signals %}
+                          {% if "USDJPY" == s.SYMBOL%}
+                            <td><input type="text" name="QUANTITY4" value="{{s.QUANTITY}}"></td>
+                         
+                         
+                        <td>FOREX</td>
+                        <td>
+                          <select name="ORDER_TYPE4">
+                            <option value="Limit">Limit Order</option>
+                            <option value="Market">Market Order</option>
+                          </select>
+                        </td>
+                        <td>
+                          <label class="switch"><input type="checkbox" name="TRADING4" {% if s.trade == 'on' %} checked {% endif %}>
+                            <span class="slider round"></span>
+                          </label>
+                        </td>
+                        {% endif %}  
+                      {% endfor %}
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>GBPUSD</td>
+                        {% for s in signals %}
+                          {% if "GBPUSD" == s.SYMBOL%}
+                            <td><input type="text" name="QUANTITY5" value="{{s.QUANTITY}}"></td>
+                         
+                        <td>FOREX</td>
+                        <td>
+                          <select name="ORDER_TYPE5">
+                            <option value="Limit">Limit Order</option>
+                            <option value="Market">Market Order</option>
+                          </select>
+                        </td>
+                        <td>
+                          <label class="switch"><input type="checkbox" name="TRADING5" {% if s.trade == 'on' %} checked {% endif %}>
+                            <span class="slider round"></span>
+                          </label>
+                        </td>
+                        {% endif %}  
+                      {% endfor %}
+                      </tr>
+                    </tbody>
+                    <td><button type="submit">Update</button></td>
+                  </table>
+                </form>
+              </div>
+            </div>
+          {% comment %} </div> {% endcomment %}
+        {% comment %} </div>
+      </div> {% endcomment %}
+    </div>
+
+
+
+    {% if error %}
+    <script>
+      alert('{{ error }}');
+    </script>
+    {% endif %}
+
+    <!-- Slider on/off switch button -->
+    <!-- <div style="position: fixed; bottom: 20px; left: 20px; z-index: 999;">
+      <label class="switch">
+        <input type="checkbox" id="mySlider">
+        <span class="slider round"></span>
+      </label>
+    </div> -->
+
+    <!-- JavaScript to open URL on slider switch change -->
+    <!-- <script>
+      document.getElementById('mySlider').addEventListener('change', function () {
+        // Check if slider is checked
+        if (this.checked) {
+          // Redirect to the specified URL
+          window.location.href = '/multibank/';
+        }
+      });
+    </script> -->
+
+
+    {% if error == "no" %}
+    <script>
+      alert('Quantity add Successful');
+      window.location = ('{% url 'client_dashboard' %}');
+    </script>
+    {% endif %}
+    {% if error == "yes" %}
+    <script>
+      alert('Invalid Add Credentials, Try Again...');
+    </script> 
+    {% endif %} 
+
+    {% endblock %}
